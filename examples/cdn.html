@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dattebayo - CDN Usage Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      margin: 0.5rem;
+    }
+
+    code {
+      background: rgba(0,0,0,0.2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-gsap="fadeUp">CDN Usage</h1>
+    <p data-gsap="fadeUp" data-gsap-delay="0.2">
+      Just add <code>data-gsap</code> attributes to your HTML!
+    </p>
+    <div>
+      <a href="#" class="btn" data-gsap="zoomIn" data-gsap-delay="0.4">Button 1</a>
+      <a href="#" class="btn" data-gsap="zoomIn" data-gsap-delay="0.5">Button 2</a>
+      <a href="#" class="btn" data-gsap="zoomIn" data-gsap-delay="0.6">Button 3</a>
+    </div>
+  </div>
+
+  <!-- Step 1: Include GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+
+  <!-- Step 2: Include GSAP Dattebayo -->
+  <script src="../dist/gsap-dattebayo.umd.min.js"></script>
+
+  <!-- Step 3: Initialize -->
+  <script>
+    GSAPDattebayo.init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dattebayo - NPM Usage Example</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    .code-block {
+      background: #1a1a2e;
+      color: #f8f8f2;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    .example-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    .demo-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NPM Usage Examples</h1>
+
+    <!-- Installation -->
+    <div class="example-section">
+      <h2>1. Installation</h2>
+      <div class="code-block">
+        <pre>npm install gsap-dattebayo gsap</pre>
+      </div>
+    </div>
+
+    <!-- Import Example -->
+    <div class="example-section">
+      <h2>2. Import and Use</h2>
+      <div class="code-block">
+        <pre>
+// Import specific animations
+import { fadeUp, zoomIn, charReveal } from 'gsap-dattebayo';
+
+// Animate elements
+fadeUp('.title', { duration: 1.2 });
+zoomIn('.card', { stagger: 0.1 });
+charReveal('.heading', { stagger: 0.05 });
+        </pre>
+      </div>
+    </div>
+
+    <!-- Auto-Init Example -->
+    <div class="example-section">
+      <h2>3. Auto-Init with Data Attributes</h2>
+      <div class="code-block">
+        <pre>
+import { init } from 'gsap-dattebayo';
+
+// Initialize with auto-detection
+init({
+  autoDetect: true,
+  defaults: {
+    duration: 1,
+    ease: 'power2.out'
+  }
+});
+        </pre>
+      </div>
+      <p>Then use data attributes in HTML:</p>
+      <div class="code-block">
+        <pre>
+&lt;div data-gsap="fadeUp"&gt;Content&lt;/div&gt;
+&lt;h1 data-gsap="charReveal" data-gsap-stagger="0.05"&gt;Title&lt;/h1&gt;
+        </pre>
+      </div>
+    </div>
+
+    <!-- Scroll Animations -->
+    <div class="example-section">
+      <h2>4. Scroll Animations</h2>
+      <div class="code-block">
+        <pre>
+import { parallax, scrollReveal } from 'gsap-dattebayo';
+
+// Parallax effect
+parallax('.background', {
+  speed: 0.5,
+  direction: 'vertical'
+});
+
+// Scroll reveal
+scrollReveal('.card', {
+  animation: 'fadeUp',
+  start: 'top 80%',
+  once: true
+});
+        </pre>
+      </div>
+    </div>
+
+    <!-- Text Animations -->
+    <div class="example-section">
+      <h2>5. Text Animations (SplitText)</h2>
+      <div class="code-block">
+        <pre>
+import {
+  charReveal,
+  wordReveal,
+  lineReveal,
+  scrambleReveal
+} from 'gsap-dattebayo';
+
+// Character-by-character
+charReveal('.title', {
+  stagger: 0.05,
+  ease: 'back.out(1.7)'
+});
+
+// Word-by-word
+wordReveal('.subtitle', {
+  stagger: 0.1
+});
+
+// Scramble effect
+scrambleReveal('.cyberpunk-text', {
+  duration: 2,
+  chars: '01'
+});
+        </pre>
+      </div>
+    </div>
+
+    <!-- Demo -->
+    <div class="demo-box" id="demo">
+      <h2 style="color: white;">Live Demo</h2>
+      <p>This content would be animated using the library!</p>
+    </div>
+
+    <!-- React Example -->
+    <div class="example-section">
+      <h2>6. React Usage</h2>
+      <div class="code-block">
+        <pre>
+import { useEffect } from 'react';
+import { fadeUp, init } from 'gsap-dattebayo';
+
+function App() {
+  useEffect(() => {
+    // Initialize on mount
+    init({ autoDetect: true });
+
+    // Or manually animate
+    fadeUp('.element');
+
+    // Cleanup
+    return () => {
+      // GSAP auto-cleanup
+    };
+  }, []);
+
+  return (
+    &lt;div data-gsap="fadeUp"&gt;
+      Animated Content
+    &lt;/div&gt;
+  );
+}
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // This page is for documentation only
+    // In real usage, you'd bundle with Webpack/Vite/etc.
+  </script>
+</body>
+</html>

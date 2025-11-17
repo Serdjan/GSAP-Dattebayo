@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dattebayo - Complete Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    .hero .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+
+    .hero .btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Section Styles */
+    section {
+      padding: 100px 0;
+    }
+
+    section:nth-child(even) {
+      background: white;
+    }
+
+    h2 {
+      font-size: 3rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #667eea;
+    }
+
+    .card p {
+      color: #666;
+    }
+
+    /* Parallax Section */
+    .parallax-section {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background: #1a1a2e;
+      color: white;
+    }
+
+    .parallax-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .parallax-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .parallax-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Text Showcase */
+    .text-showcase {
+      padding: 100px 20px;
+      text-align: center;
+    }
+
+    .text-showcase h2 {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    .text-showcase p {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* Footer */
+    footer {
+      background: #1a1a2e;
+      color: white;
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    /* Utility */
+    .mb-4 { margin-bottom: 2rem; }
+    .mt-4 { margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 data-gsap="fadeUp" data-gsap-duration="1.2">GSAP Dattebayo</h1>
+      <p data-gsap="fadeUp" data-gsap-delay="0.2">The ultimate GSAP-powered animation library</p>
+      <a href="#demo" class="btn" data-gsap="zoomIn" data-gsap-delay="0.4">See It In Action</a>
+    </div>
+  </section>
+
+  <!-- Core Animations Demo -->
+  <section id="demo">
+    <div class="container">
+      <h2 data-gsap="fadeUp">Core Animations</h2>
+
+      <div class="grid">
+        <div class="card" data-gsap="fadeUp" data-gsap-delay="0">
+          <h3>Fade Up</h3>
+          <p>Classic fade with upward movement. Perfect for scroll reveals.</p>
+        </div>
+
+        <div class="card" data-gsap="fadeLeft" data-gsap-delay="0.1">
+          <h3>Fade Left</h3>
+          <p>Slides in from the right with fade effect.</p>
+        </div>
+
+        <div class="card" data-gsap="zoomIn" data-gsap-delay="0.2">
+          <h3>Zoom In</h3>
+          <p>Scales up from zero with fade. Eye-catching entrance.</p>
+        </div>
+
+        <div class="card" data-gsap="rotateIn" data-gsap-delay="0.3">
+          <h3>Rotate In</h3>
+          <p>Spins into view with 3D rotation effect.</p>
+        </div>
+
+        <div class="card" data-gsap="blurToFocus" data-gsap-delay="0.4">
+          <h3>Blur to Focus</h3>
+          <p>2025 trend: Blur-to-sharp reveal animation.</p>
+        </div>
+
+        <div class="card" data-gsap="slideInUp" data-gsap-delay="0.5">
+          <h3>Slide In Up</h3>
+          <p>Smooth slide from bottom to position.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Text Animations -->
+  <section class="text-showcase">
+    <div class="container">
+      <h2 data-gsap="charReveal" data-gsap-stagger="0.03">Character Reveal</h2>
+      <p data-gsap="wordReveal" data-gsap-stagger="0.08" class="mb-4">
+        This text animates word by word, creating a smooth reading experience.
+        Each word fades in sequentially for maximum impact.
+      </p>
+
+      <p data-gsap="lineReveal" data-gsap-stagger="0.15" class="mt-4">
+        Line-by-line reveal creates elegant
+        paragraph animations that guide
+        the reader's attention naturally.
+      </p>
+    </div>
+  </section>
+
+  <!-- Parallax Section -->
+  <section class="parallax-section">
+    <div class="parallax-layer parallax-bg" data-gsap-parallax="0.3"></div>
+    <div class="parallax-content">
+      <div class="container">
+        <h2 data-gsap="fadeUp">Parallax Scrolling</h2>
+        <p data-gsap="fadeUp" data-gsap-delay="0.2" style="font-size: 1.5rem; max-width: 800px; margin: 0 auto;">
+          Smooth parallax effects powered by GSAP ScrollTrigger.
+          Elements move at different speeds for depth and dimension.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- More Examples -->
+  <section>
+    <div class="container">
+      <h2 data-gsap="fadeUp">Advanced Effects</h2>
+
+      <div class="grid">
+        <div class="card" data-gsap="elasticZoom">
+          <h3>Elastic Zoom</h3>
+          <p>Bouncy scale animation with elastic easing. Modern and playful.</p>
+        </div>
+
+        <div class="card" data-gsap="flipInX">
+          <h3>Flip In</h3>
+          <p>3D flip rotation with perspective. Adds depth to reveals.</p>
+        </div>
+
+        <div class="card" data-gsap="spinIn">
+          <h3>Spin In</h3>
+          <p>Continuous rotation entrance. Great for logos and icons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scramble Text Demo -->
+  <section style="background: #1a1a2e; color: white;">
+    <div class="container text-center">
+      <h2 data-gsap="scramble" data-gsap-duration="2">Scramble Text Effect</h2>
+      <p data-gsap="glitch" data-gsap-delay="2" style="font-size: 1.5rem; margin-top: 2rem;">
+        Cyberpunk-style glitch reveal animation
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p data-gsap="fadeIn">&copy; 2025 GSAP Dattebayo. Simple as AOS, powerful as GSAP.</p>
+      <p data-gsap="fadeIn" data-gsap-delay="0.2">
+        <a href="https://github.com/yourusername/gsap-dattebayo" style="color: #667eea;">GitHub</a> |
+        <a href="https://npmjs.com/package/gsap-dattebayo" style="color: #667eea;">NPM</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+  <script src="../dist/gsap-dattebayo.umd.js"></script>
+
+  <script>
+    // Initialize GSAP Dattebayo with auto-detection
+    GSAPDattebayo.init({
+      autoDetect: true,
+      defaults: {
+        duration: 1,
+        ease: 'power2.out',
+        once: false
+      },
+      debug: true
+    });
+
+    // Smooth scroll (optional)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
