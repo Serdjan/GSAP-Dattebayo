@@ -276,6 +276,46 @@ scrollReveal(".card", {
 });
 ```
 
+### Scroll Options (NEW in v0.1.1)
+
+Control how animations behave when scrolling up and down:
+
+```html
+<!-- Reverse: plays forward and backward -->
+<div data-gsap="fadeUp" data-gsap-option="reverse">
+  Ping-pong animation
+</div>
+
+<!-- Scrub: tied to scroll position -->
+<div data-gsap="fadeUp" data-gsap-option="scrub">
+  Smooth scrubbing
+</div>
+
+<!-- Replay: replays without reversing -->
+<div data-gsap="fadeUp" data-gsap-option="replay">
+  Replay on scroll back
+</div>
+```
+
+### Hover & Click Triggers (NEW in v0.1.1)
+
+```html
+<!-- Simple hover -->
+<div data-gsap-hover="elasticZoom">
+  Hover me!
+</div>
+
+<!-- Hover with leave animation -->
+<div data-gsap-hover="zoomIn" data-gsap-hoverleave="zoomOut">
+  Smooth hover IN and OUT
+</div>
+
+<!-- Click trigger -->
+<div data-gsap-trigger="click" data-gsap="spinIn">
+  Click to animate
+</div>
+```
+
 ### Custom Options
 
 ```html
@@ -317,21 +357,25 @@ init({
 
 ### Data Attributes Reference
 
-| Attribute            | Type           | Default      | Description                    |
-| -------------------- | -------------- | ------------ | ------------------------------ |
-| `data-gsap`          | string         | -            | Animation name                 |
-| `data-gsap-duration` | number         | 1            | Animation duration (seconds)   |
-| `data-gsap-delay`    | number         | 0            | Delay before animation         |
-| `data-gsap-ease`     | string         | 'power2.out' | GSAP easing function           |
-| `data-gsap-distance` | number         | 50           | Movement distance (px)         |
-| `data-gsap-stagger`  | number         | 0            | Stagger delay between elements |
-| `data-gsap-start`    | string         | 'top 80%'    | ScrollTrigger start position   |
-| `data-gsap-end`      | string         | 'bottom 20%' | ScrollTrigger end position     |
-| `data-gsap-once`     | boolean        | false        | Animate only once              |
-| `data-gsap-markers`  | boolean        | false        | Show ScrollTrigger markers     |
-| `data-gsap-scrub`    | boolean/number | false        | Smooth scroll-linked animation |
-| `data-gsap-pin`      | boolean        | false        | Pin element while scrolling    |
-| `data-gsap-parallax` | number         | -            | Parallax speed multiplier      |
+| Attribute               | Type           | Default      | Description                             |
+| ----------------------- | -------------- | ------------ | --------------------------------------- |
+| `data-gsap`             | string         | -            | Animation name                          |
+| `data-gsap-duration`    | number         | 1            | Animation duration (seconds)            |
+| `data-gsap-delay`       | number         | 0            | Delay before animation                  |
+| `data-gsap-ease`        | string         | 'power2.out' | GSAP easing function                    |
+| `data-gsap-distance`    | number         | 50           | Movement distance (px)                  |
+| `data-gsap-stagger`     | number         | 0            | Stagger delay between elements          |
+| `data-gsap-start`       | string         | 'top 80%'    | ScrollTrigger start position            |
+| `data-gsap-end`         | string         | 'bottom 20%' | ScrollTrigger end position              |
+| `data-gsap-once`        | boolean        | true         | Animate only once (AOS-like)            |
+| `data-gsap-markers`     | boolean        | false        | Show ScrollTrigger markers              |
+| `data-gsap-scrub`       | boolean/number | false        | Smooth scroll-linked animation          |
+| `data-gsap-pin`         | boolean        | false        | Pin element while scrolling             |
+| `data-gsap-parallax`    | number         | -            | Parallax speed multiplier               |
+| `data-gsap-option`      | string         | -            | 'reverse', 'scrub', or 'replay'         |
+| `data-gsap-trigger`     | string         | 'scroll'     | 'load', 'scroll', 'hover', or 'click'   |
+| `data-gsap-hover`       | string         | -            | Animation name for hover                |
+| `data-gsap-hoverleave`  | string         | -            | Animation name for hover leave          |
 
 ### GSAP Easing Presets
 

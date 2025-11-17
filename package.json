@@ -1,6 +1,6 @@
 {
   "name": "gsap-dattebayo",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.1-alpha",
   "description": "The ultimate GSAP-powered scroll animation library - Simple as AOS, powerful as GSAP. Modern animations for 2025-2026 web trends.",
   "main": "dist/gsap-dattebayo.cjs.js",
   "module": "dist/gsap-dattebayo.esm.js",

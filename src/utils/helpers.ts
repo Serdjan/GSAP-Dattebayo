@@ -117,7 +117,7 @@ export function isBelowViewport(element: HTMLElement): boolean {
 
 /**
  * Calculate optimal ScrollTrigger start position based on element position
- * For elements near bottom of page, use a more aggressive trigger point
+ * For elements near bottom of page, use bottom-based trigger instead of top-based
  */
 export function getOptimalScrollTriggerStart(element: HTMLElement, defaultStart: string = 'top 80%'): string {
   if (!isBrowser()) return defaultStart;
@@ -131,14 +131,10 @@ export function getOptimalScrollTriggerStart(element: HTMLElement, defaultStart:
   // Calculate how far the element is from the bottom of the page
   const distanceFromBottom = documentHeight - (elementTop + rect.height);
 
-  // If element is in the last 20% of the page (near bottom)
+  // If element is very close to bottom (less than 20% viewport height)
+  // Use bottom-based trigger instead of top-based
   if (distanceFromBottom < windowHeight * 0.2) {
-    return 'top 95%'; // More aggressive trigger
-  }
-
-  // If element is in the last 40% of the page
-  if (distanceFromBottom < windowHeight * 0.4) {
-    return 'top 90%';
+    return 'bottom 100%'; // Trigger when bottom of element reaches bottom of viewport
   }
 
   return defaultStart;

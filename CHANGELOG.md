@@ -66,6 +66,32 @@ All GSAP plugins (ScrollTrigger, SplitText) are now free as of 2025.
 
 ---
 
+## [0.1.1-alpha] - 2025-01-17
+
+### Added
+
+#### Scroll Animation Options
+- ✨ **Reverse mode** (`data-gsap-option="reverse"`) - Ping-pong animations that play forward on scroll down, backward on scroll up
+- ✨ **Scrub mode** (`data-gsap-option="scrub"`) - Animations tied directly to scroll position for smooth scrubbing effect
+- ✨ **Replay mode** (`data-gsap-option="replay"`) - Animations replay when scrolling back without reversing
+
+#### Trigger Modes
+- ✨ **Hover triggers** (`data-gsap-hover`) - Animate on mouseenter with automatic reset on mouseleave
+- ✨ **Hover with leave animation** (`data-gsap-hoverleave`) - Custom animation for hover leave
+- ✨ **Click triggers** (`data-gsap-trigger="click"`) - Animate on every click event
+- ✨ **Load trigger** (`data-gsap-trigger="load"`) - Execute animation immediately on page load
+
+### Fixed
+- 🐛 Footer and bottom elements now trigger animations correctly using `bottom 100%` trigger for elements within 20% of page bottom
+- 🐛 ScrollTrigger position optimization for elements near page bottom
+
+### Improved
+- ⚡ Smart ScrollTrigger positioning based on element location on page
+- ⚡ Better viewport detection for bottom-positioned elements
+- 📚 Updated documentation with new trigger modes and scroll options
+
+---
+
 ## [Unreleased]
 
 ### Planned for v0.2.0
