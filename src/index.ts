@@ -12,6 +12,9 @@
 // Initialize GSAP
 import { initGSAP, refreshScrollTriggers, killAll } from './utils/gsap-config';
 
+// Import auto-init for use in init function
+import { autoInit, refresh, destroy } from './auto-init';
+
 // Export utilities
 export { mergeConfig, DEFAULT_CONFIG, EASINGS } from './utils/defaults';
 export type { DattebayoDefaults, EasingPreset } from './utils/defaults';
@@ -25,8 +28,8 @@ export * from './text';
 // Export all scroll animations
 export * from './scroll';
 
-// Export auto-init system
-export { autoInit, refresh, destroy } from './auto-init';
+// Re-export auto-init system
+export { autoInit, refresh, destroy };
 
 /**
  * Main initialization function

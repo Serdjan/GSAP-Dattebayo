@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dattebayo - Quick Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 200vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 40px;
+      margin: 40px 0;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      font-size: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-gsap="fadeUp">GSAP Dattebayo Test</h1>
+
+    <div class="box" data-gsap="fadeUp" data-gsap-delay="0.2">
+      <h2>Core Animation Test</h2>
+      <p>This box should fade up when the page loads.</p>
+    </div>
+
+    <div class="box" data-gsap="zoomIn" data-gsap-delay="0.4">
+      <h2>Zoom Animation</h2>
+      <p>This box should zoom in with a slight delay.</p>
+    </div>
+
+    <div class="box" data-gsap="slideInLeft" data-gsap-delay="0.6">
+      <h2>Slide Animation</h2>
+      <p>This box should slide in from the left.</p>
+    </div>
+
+    <div class="box" data-gsap="blurToFocus" data-gsap-delay="0.8">
+      <h2>Blur Effect (2025 Trend)</h2>
+      <p>This box should go from blurry to sharp focus.</p>
+    </div>
+
+    <div class="box" data-gsap="rotateIn" data-gsap-delay="1.0">
+      <h2>Rotate Animation</h2>
+      <p>This box should rotate in with a spin effect.</p>
+    </div>
+
+    <h2 data-gsap="charReveal" data-gsap-stagger="0.05" style="color: white; text-align: center; font-size: 3rem; margin: 100px 0;">
+      Character Reveal
+    </h2>
+
+    <div class="box" data-gsap="fadeUp">
+      <h2>Scroll Reveal Test</h2>
+      <p>This box should animate when you scroll down to it.</p>
+    </div>
+  </div>
+
+  <!-- GSAP Core -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+
+  <!-- GSAP Dattebayo -->
+  <script src="../dist/gsap-dattebayo.umd.js"></script>
+
+  <script>
+    console.log('GSAPDattebayo:', GSAPDattebayo);
+    console.log('Testing initialization...');
+
+    // Initialize with debug mode
+    GSAPDattebayo.init({
+      autoDetect: true,
+      debug: true,
+      defaults: {
+        duration: 1,
+        ease: 'power2.out'
+      }
+    });
+
+    console.log('Initialization complete!');
+  </script>
+</body>
+</html>
