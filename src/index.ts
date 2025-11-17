@@ -48,7 +48,6 @@ export function init(config: DattebayoConfig = {}): void {
 
   // Auto-detect and animate elements
   if (autoDetect) {
-    const { autoInit } = require('./auto-init');
     autoInit(defaults);
   }
 
@@ -73,7 +72,7 @@ export const utils = {
 export default {
   init,
   utils,
-  autoInit: require('./auto-init').autoInit,
+  autoInit,
   refresh: refreshScrollTriggers,
   destroy: killAll
 };
