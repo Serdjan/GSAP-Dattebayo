@@ -104,6 +104,47 @@ export function isInViewport(element: HTMLElement, offset = 0): boolean {
 }
 
 /**
+ * Check if element is below viewport (not yet visible)
+ */
+export function isBelowViewport(element: HTMLElement): boolean {
+  if (!isBrowser()) return false;
+
+  const rect = element.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  return rect.top > windowHeight;
+}
+
+/**
+ * Calculate optimal ScrollTrigger start position based on element position
+ * For elements near bottom of page, use a more aggressive trigger point
+ */
+export function getOptimalScrollTriggerStart(element: HTMLElement, defaultStart: string = 'top 80%'): string {
+  if (!isBrowser()) return defaultStart;
+
+  const rect = element.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const elementTop = rect.top + scrollTop;
+  const documentHeight = document.documentElement.scrollHeight;
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  // Calculate how far the element is from the bottom of the page
+  const distanceFromBottom = documentHeight - (elementTop + rect.height);
+
+  // If element is in the last 20% of the page (near bottom)
+  if (distanceFromBottom < windowHeight * 0.2) {
+    return 'top 95%'; // More aggressive trigger
+  }
+
+  // If element is in the last 40% of the page
+  if (distanceFromBottom < windowHeight * 0.4) {
+    return 'top 90%';
+  }
+
+  return defaultStart;
+}
+
+/**
  * Generate unique ID for elements
  */
 export function generateId(prefix = 'gsap-db'): string {

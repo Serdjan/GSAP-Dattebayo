@@ -13,6 +13,10 @@ export interface DattebayoDefaults {
   end: string;
   once: boolean;
   markers: boolean;
+  triggerMode: 'load' | 'scroll' | 'hover' | 'click';
+  hoverAnimation?: string;
+  hoverLeaveAnimation?: string;
+  option?: 'reverse' | 'scrub' | 'replay';
 }
 
 export const DEFAULT_CONFIG: DattebayoDefaults = {
@@ -34,7 +38,8 @@ export const DEFAULT_CONFIG: DattebayoDefaults = {
   end: 'bottom 20%',
 
   // Animation behavior
-  once: false,
+  once: true,  // Default to one-time animation like AOS
+  triggerMode: 'scroll',  // Default to scroll-based like AOS
 
   // Development helpers
   markers: false

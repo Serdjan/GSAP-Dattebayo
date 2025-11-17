@@ -11,6 +11,9 @@ export interface ParsedAttributes extends Partial<DattebayoDefaults> {
   scrub?: boolean | number;
   pin?: boolean;
   parallax?: number;
+  hoverAnimation?: string;
+  hoverLeaveAnimation?: string;
+  option?: 'reverse' | 'scrub' | 'replay';
 }
 
 /**
@@ -62,9 +65,15 @@ export function parseAttributes(element: HTMLElement): ParsedAttributes {
     attrs.markers = element.dataset.gsapMarkers === 'true';
   }
 
-  // Custom trigger element
+  // Custom trigger element for ScrollTrigger
   if (element.dataset.gsapTrigger) {
-    attrs.trigger = element.dataset.gsapTrigger;
+    // Check if it's a trigger mode or a selector
+    const triggerValue = element.dataset.gsapTrigger;
+    if (['load', 'scroll', 'hover', 'click'].includes(triggerValue)) {
+      attrs.triggerMode = triggerValue as 'load' | 'scroll' | 'hover' | 'click';
+    } else {
+      attrs.trigger = triggerValue;
+    }
   }
 
   // Scrub (smooth scroll-linked animation)
@@ -83,6 +92,23 @@ export function parseAttributes(element: HTMLElement): ParsedAttributes {
     attrs.parallax = parseFloat(element.dataset.gsapParallax);
   }
 
+  // Hover animations
+  if (element.dataset.gsapHover) {
+    attrs.hoverAnimation = element.dataset.gsapHover;
+  }
+
+  if (element.dataset.gsapHoverleave) {
+    attrs.hoverLeaveAnimation = element.dataset.gsapHoverleave;
+  }
+
+  // Scroll option (reverse, scrub, replay)
+  if (element.dataset.gsapOption) {
+    const optionValue = element.dataset.gsapOption;
+    if (['reverse', 'scrub', 'replay'].includes(optionValue)) {
+      attrs.option = optionValue as 'reverse' | 'scrub' | 'replay';
+    }
+  }
+
   return attrs;
 }
 
@@ -90,7 +116,7 @@ export function parseAttributes(element: HTMLElement): ParsedAttributes {
  * Get all elements with data-gsap or data-dattebayo attributes
  */
 export function getAnimatedElements(root: Document | HTMLElement = document): HTMLElement[] {
-  const selector = '[data-gsap], [data-dattebayo]';
+  const selector = '[data-gsap], [data-dattebayo], [data-gsap-hover], [data-gsap-trigger]';
   return Array.from(root.querySelectorAll<HTMLElement>(selector));
 }
 
