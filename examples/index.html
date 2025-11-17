@@ -216,13 +216,13 @@
   <!-- Text Animations -->
   <section class="text-showcase">
     <div class="container">
-      <h2 data-gsap="charReveal" data-gsap-stagger="0.03">Character Reveal</h2>
-      <p data-gsap="wordReveal" data-gsap-stagger="0.08" class="mb-4">
+      <h2 id="text-char" style="opacity: 0;">Character Reveal</h2>
+      <p id="text-word" class="mb-4" style="opacity: 0;">
         This text animates word by word, creating a smooth reading experience.
         Each word fades in sequentially for maximum impact.
       </p>
 
-      <p data-gsap="lineReveal" data-gsap-stagger="0.15" class="mt-4">
+      <p id="text-line" class="mt-4" style="opacity: 0;">
         Line-by-line reveal creates elegant
         paragraph animations that guide
         the reader's attention naturally.
@@ -271,8 +271,8 @@
   <!-- Scramble Text Demo -->
   <section style="background: #1a1a2e; color: white;">
     <div class="container text-center">
-      <h2 data-gsap="scramble" data-gsap-duration="2">Scramble Text Effect</h2>
-      <p data-gsap="glitch" data-gsap-delay="2" style="font-size: 1.5rem; margin-top: 2rem;">
+      <h2 id="text-scramble" style="opacity: 0;">Scramble Text Effect</h2>
+      <p id="text-glitch" style="font-size: 1.5rem; margin-top: 2rem; opacity: 0;">
         Cyberpunk-style glitch reveal animation
       </p>
     </div>
@@ -305,6 +305,67 @@
         once: false
       },
       debug: true
+    });
+
+    // Import text animation functions
+    const { charReveal, wordReveal, lineReveal, scrambleReveal, glitchReveal } = GSAPDattebayo;
+
+    // Setup text animations with ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Character reveal animation
+    ScrollTrigger.create({
+      trigger: '#text-char',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.set('#text-char', { opacity: 1 });
+        charReveal('#text-char', { stagger: 0.03 });
+      }
+    });
+
+    // Word reveal animation
+    ScrollTrigger.create({
+      trigger: '#text-word',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.set('#text-word', { opacity: 1 });
+        wordReveal('#text-word', { stagger: 0.08 });
+      }
+    });
+
+    // Line reveal animation
+    ScrollTrigger.create({
+      trigger: '#text-line',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.set('#text-line', { opacity: 1 });
+        lineReveal('#text-line', { stagger: 0.15 });
+      }
+    });
+
+    // Scramble text animation
+    ScrollTrigger.create({
+      trigger: '#text-scramble',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.set('#text-scramble', { opacity: 1 });
+        scrambleReveal('#text-scramble', { duration: 2 });
+      }
+    });
+
+    // Glitch text animation
+    ScrollTrigger.create({
+      trigger: '#text-glitch',
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.set('#text-glitch', { opacity: 1 });
+        glitchReveal('#text-glitch', { duration: 1.5 });
+      }
     });
 
     // Smooth scroll (optional)

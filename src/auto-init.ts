@@ -74,6 +74,27 @@ function executeAnimation(
   animationName: string,
   config: DattebayoDefaults
 ): void {
+  // Special cases: animations that don't take a target element
+  const noTargetAnimations = ['scrollProgress', 'circularProgress'];
+
+  if (noTargetAnimations.includes(animationName)) {
+    // These animations create their own elements
+    const specialAnimations: Record<string, (options: any) => any> = {
+      scrollProgress: scrollAnimations.scrollProgress,
+      circularProgress: scrollAnimations.circularProgress
+    };
+
+    const animationFn = specialAnimations[animationName];
+    if (animationFn) {
+      try {
+        animationFn(config);
+      } catch (error) {
+        console.error(`[GSAP Dattebayo] Error executing ${animationName}:`, error);
+      }
+    }
+    return;
+  }
+
   // Map animation names to functions
   const animationMap: Record<string, (target: HTMLElement, options: any) => any> = {
     // Core - Fade
@@ -100,16 +121,23 @@ function executeAnimation(
     zoomOut: coreAnimations.zoomOut,
     zoomInUp: coreAnimations.zoomInUp,
     zoomInDown: coreAnimations.zoomInDown,
+    elasticZoom: coreAnimations.elasticZoom,
 
     // Core - Rotate
     rotate: coreAnimations.rotateIn,
     rotateIn: coreAnimations.rotateIn,
     rotateOut: coreAnimations.rotateOut,
+    flipInX: coreAnimations.flipInX,
+    flipInY: coreAnimations.flipInY,
+    spinIn: coreAnimations.spinIn,
 
     // Core - Blur
     blur: coreAnimations.blurToFocus,
     blurIn: coreAnimations.blurToFocus,
     blurToFocus: coreAnimations.blurToFocus,
+    focusToBlur: coreAnimations.focusToBlur,
+    blurInUp: coreAnimations.blurInUp,
+    blurZoom: coreAnimations.blurZoom,
 
     // Text - Character
     charReveal: textAnimations.charReveal,
@@ -122,23 +150,39 @@ function executeAnimation(
     wordReveal: textAnimations.wordReveal,
     wordScaleIn: textAnimations.wordScaleIn,
     wordRotateIn: textAnimations.wordRotateIn,
+    wordSlideAlternate: textAnimations.wordSlideAlternate,
 
     // Text - Line
     lineReveal: textAnimations.lineReveal,
     lineClipReveal: textAnimations.lineClipReveal,
+    lineSlideAlternate: textAnimations.lineSlideAlternate,
     lineScaleReveal: textAnimations.lineScaleReveal,
 
     // Text - Scramble
     scramble: textAnimations.scrambleReveal,
+    scrambleReveal: textAnimations.scrambleReveal,
     glitch: textAnimations.glitchReveal,
+    glitchReveal: textAnimations.glitchReveal,
     matrix: textAnimations.matrixReveal,
+    matrixReveal: textAnimations.matrixReveal,
 
     // Scroll - Parallax
     parallax: scrollAnimations.parallax,
     parallaxSpeed: scrollAnimations.parallaxSpeed,
+    parallaxLayers: scrollAnimations.parallaxLayers,
+    parallax3D: scrollAnimations.parallax3D,
+    parallaxRotate: scrollAnimations.parallaxRotate,
 
     // Scroll - Reveal
-    scrollReveal: scrollAnimations.scrollReveal
+    scrollReveal: scrollAnimations.scrollReveal,
+    batchScrollReveal: scrollAnimations.batchScrollReveal,
+    pinSection: scrollAnimations.pinSection,
+    scrubAnimation: scrollAnimations.scrubAnimation,
+    horizontalScroll: scrollAnimations.horizontalScroll,
+
+    // Scroll - Progress (only those that take a target)
+    sectionProgress: scrollAnimations.sectionProgress,
+    scrollPercentage: scrollAnimations.scrollPercentage
   };
 
   const animationFn = animationMap[animationName];

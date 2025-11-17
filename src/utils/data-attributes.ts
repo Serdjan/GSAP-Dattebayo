@@ -108,18 +108,42 @@ export function isValidAnimation(name: string | undefined): boolean {
   if (!name) return false;
 
   const validAnimations = [
-    // Core
+    // Core - Fade
     'fade', 'fadeIn', 'fadeOut', 'fadeUp', 'fadeDown', 'fadeLeft', 'fadeRight',
+
+    // Core - Slide
     'slide', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight',
-    'zoom', 'zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown',
-    'rotate', 'rotateIn', 'rotateOut',
-    'blur', 'blurIn', 'blurToFocus',
+    'slideOutUp', 'slideOutDown',
 
-    // Text
-    'charReveal', 'wordReveal', 'lineReveal', 'scramble',
+    // Core - Zoom
+    'zoom', 'zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown', 'elasticZoom',
 
-    // Scroll
-    'parallax', 'scrollReveal', 'scrollProgress'
+    // Core - Rotate
+    'rotate', 'rotateIn', 'rotateOut', 'flipInX', 'flipInY', 'spinIn',
+
+    // Core - Blur
+    'blur', 'blurIn', 'blurToFocus', 'focusToBlur', 'blurInUp', 'blurZoom',
+
+    // Text - Character
+    'charReveal', 'charFadeUp', 'charWave', 'charElastic', 'charBlur',
+
+    // Text - Word
+    'wordReveal', 'wordScaleIn', 'wordRotateIn', 'wordSlideAlternate',
+
+    // Text - Line
+    'lineReveal', 'lineClipReveal', 'lineSlideAlternate', 'lineScaleReveal',
+
+    // Text - Special
+    'scramble', 'scrambleReveal', 'glitch', 'glitchReveal', 'matrix', 'matrixReveal',
+
+    // Scroll - Parallax
+    'parallax', 'parallaxSpeed', 'parallaxLayers', 'parallax3D', 'parallaxRotate',
+
+    // Scroll - Reveal
+    'scrollReveal', 'batchScrollReveal', 'pinSection', 'scrubAnimation', 'horizontalScroll',
+
+    // Scroll - Progress
+    'scrollProgress', 'sectionProgress', 'circularProgress', 'scrollPercentage'
   ];
 
   return validAnimations.includes(name);
