@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP Dattebayo - Text Animations Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 300vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .spacer {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+    }
+
+    .text-showcase {
+      min-height: 100vh;
+      padding: 100px 20px;
+      text-align: center;
+      background: white;
+      color: #333;
+    }
+
+    .text-showcase h2 {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    .text-showcase h3 {
+      font-size: 2.5rem;
+      margin: 3rem 0 2rem;
+    }
+
+    .text-showcase p {
+      font-size: 1.5rem;
+      max-width: 800px;
+      margin: 2rem auto;
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="spacer">
+    ↓ Scroll Down to See Text Animations ↓
+  </div>
+
+  <section class="text-showcase" id="text-section">
+    <div class="container">
+      <h2 id="main-title">Text Animation Showcase</h2>
+
+      <h3 id="char-title">Character Reveal</h3>
+      <p id="word-text">
+        This text animates word by word, creating a smooth reading experience.
+        Each word fades in sequentially for maximum impact.
+      </p>
+
+      <p id="line-text">
+        Line-by-line reveal creates elegant
+        paragraph animations that guide
+        the reader's attention naturally.
+      </p>
+    </div>
+  </section>
+
+  <div class="spacer">
+    End of Demo
+  </div>
+
+  <!-- GSAP Core -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/SplitText.min.js"></script>
+
+  <!-- GSAP Dattebayo -->
+  <script src="../dist/gsap-dattebayo.umd.js"></script>
+
+  <script>
+    console.log('GSAPDattebayo:', GSAPDattebayo);
+
+    // Import animation functions
+    const { charReveal, wordReveal, lineReveal, fadeUp } = GSAPDattebayo;
+
+    // Initialize GSAP (this also registers plugins)
+    GSAPDattebayo.init({ autoDetect: false, debug: true });
+
+    // Create ScrollTrigger for text animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Main title with fadeUp
+    ScrollTrigger.create({
+      trigger: '#text-section',
+      start: 'top 80%',
+      once: true,
+      markers: true,
+      onEnter: () => {
+        console.log('Triggering main title animation');
+        fadeUp('#main-title', { duration: 1 });
+      }
+    });
+
+    // Character reveal
+    ScrollTrigger.create({
+      trigger: '#char-title',
+      start: 'top 80%',
+      once: true,
+      markers: true,
+      onEnter: () => {
+        console.log('Triggering character reveal');
+        charReveal('#char-title', {
+          stagger: 0.03,
+          duration: 1
+        });
+      }
+    });
+
+    // Word reveal
+    ScrollTrigger.create({
+      trigger: '#word-text',
+      start: 'top 80%',
+      once: true,
+      markers: true,
+      onEnter: () => {
+        console.log('Triggering word reveal');
+        wordReveal('#word-text', {
+          stagger: 0.08,
+          duration: 0.6
+        });
+      }
+    });
+
+    // Line reveal
+    ScrollTrigger.create({
+      trigger: '#line-text',
+      start: 'top 80%',
+      once: true,
+      markers: true,
+      onEnter: () => {
+        console.log('Triggering line reveal');
+        lineReveal('#line-text', {
+          stagger: 0.15,
+          duration: 0.8
+        });
+      }
+    });
+
+    console.log('Scroll triggers set up complete!');
+  </script>
+</body>
+</html>

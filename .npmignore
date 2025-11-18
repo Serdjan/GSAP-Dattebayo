@@ -1,0 +1,34 @@
+# Source files
+src/
+tsconfig.json
+rollup.config.js
+
+# Examples and docs (not needed in npm package)
+examples/
+docs/
+
+# Development files
+.github/
+.vscode/
+.idea/
+
+# Tests
+tests/
+*.test.ts
+*.spec.ts
+
+# Config files
+.eslintrc
+.prettierrc
+.editorconfig
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

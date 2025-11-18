@@ -1,0 +1,83 @@
+{
+  "name": "gsap-dattebayo",
+  "version": "0.1.2-alpha",
+  "description": "The ultimate GSAP-powered scroll animation library - Simple as AOS, powerful as GSAP. Modern animations for 2025-2026 web trends.",
+  "main": "dist/gsap-dattebayo.cjs.js",
+  "module": "dist/gsap-dattebayo.esm.js",
+  "browser": "dist/gsap-dattebayo.umd.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/gsap-dattebayo.esm.js",
+      "require": "./dist/gsap-dattebayo.cjs.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./core": {
+      "import": "./dist/core.esm.js",
+      "require": "./dist/core.cjs.js"
+    },
+    "./text": {
+      "import": "./dist/text.esm.js",
+      "require": "./dist/text.cjs.js"
+    },
+    "./scroll": {
+      "import": "./dist/scroll.esm.js",
+      "require": "./dist/scroll.cjs.js"
+    }
+  },
+  "scripts": {
+    "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "prebuild": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "gsap",
+    "scroll",
+    "animation",
+    "scrolltrigger",
+    "aos",
+    "parallax",
+    "reveal",
+    "scroll-animation",
+    "splittext",
+    "text-animation",
+    "web-animation",
+    "2025-trends",
+    "smooth-scroll",
+    "viewport-animation",
+    "typescript"
+  ],
+  "author": "GSAP Dattebayo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serdjan/gsap-dattebayo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/serdjan/gsap-dattebayo/issues"
+  },
+  "homepage": "https://github.com/serdjan/gsap-dattebayo#readme",
+  "peerDependencies": {
+    "gsap": "^3.12.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.9.6",
+    "rollup-plugin-dts": "^6.1.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
