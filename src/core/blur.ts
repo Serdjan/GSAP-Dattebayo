@@ -35,7 +35,7 @@ export function blurToFocus(
     ease,
     delay,
     force3D: true,
-    clearProps: 'all'
+    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
   });
 }
 
@@ -88,7 +88,7 @@ export function blurInUp(
     ease,
     delay,
     force3D: true,
-    clearProps: 'all'
+    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
   });
 }
 
@@ -115,6 +115,6 @@ export function blurZoom(
     ease,
     delay,
     force3D: true,
-    clearProps: 'all'
+    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
   });
 }
