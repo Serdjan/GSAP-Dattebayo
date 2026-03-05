@@ -17,7 +17,6 @@ import {
 import {
   ready,
   debounce,
-  isBelowViewport,
   getOptimalScrollTriggerStart,
 } from "./utils/helpers";
 import { mergeConfig, type DattebayoDefaults } from "./utils/defaults";
@@ -229,6 +228,12 @@ export function animateElements(root: Document | HTMLElement = document): void {
   const elements = getAnimatedElements(root);
 
   elements.forEach((element) => {
+    // Skip elements not connected to the DOM (detached nodes from MutationObserver)
+    if (!element.isConnected) return;
+
+    // Skip elements already initialized by dattebayo
+    if ((element as any)._gsapDattebayo) return;
+
     const attrs = parseAttributes(element);
     const animation = attrs.animation;
 
@@ -255,6 +260,9 @@ export function animateElements(root: Document | HTMLElement = document): void {
       ...globalConfig,
       ...attrs,
     });
+
+    // Mark element as initialized to prevent duplicate processing
+    (element as any)._gsapDattebayo = true;
 
     // Execute animation
     executeAnimation(element, animation || "", config);
@@ -893,16 +901,46 @@ function getFinalState(
 
 /**
  * Setup MutationObserver for dynamic content
+ * Debounced to avoid processing incomplete DOM trees (WordPress/Elementor compatibility)
  */
 function setupObserver(): void {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          animateElements(node as HTMLElement);
-        }
-      });
+  let pendingNodes: Set<HTMLElement> = new Set();
+  let rafId: number | null = null;
+
+  const processPendingNodes = () => {
+    rafId = null;
+    const nodes = pendingNodes;
+    pendingNodes = new Set();
+
+    nodes.forEach((node) => {
+      // Double-check node is still connected before processing
+      if (node.isConnected) {
+        animateElements(node);
+      }
     });
+  };
+
+  const observer = new MutationObserver((mutations) => {
+    let hasNewElements = false;
+
+    for (const mutation of mutations) {
+      for (let i = 0; i < mutation.addedNodes.length; i++) {
+        const node = mutation.addedNodes[i];
+        if (node.nodeType !== Node.ELEMENT_NODE) continue;
+        const el = node as HTMLElement;
+
+        // Only queue elements that have data-gsap attributes or contain them
+        if (el.hasAttribute('data-gsap') || el.querySelector('[data-gsap]')) {
+          pendingNodes.add(el);
+          hasNewElements = true;
+        }
+      }
+    }
+
+    // Batch processing via requestAnimationFrame (one frame delay)
+    if (hasNewElements && rafId === null) {
+      rafId = requestAnimationFrame(processPendingNodes);
+    }
   });
 
   observer.observe(document.body, {
