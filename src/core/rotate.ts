@@ -37,7 +37,7 @@ export function rotateIn(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
+    clearProps: 'all'
   });
 }
 
@@ -92,7 +92,7 @@ export function flipInX(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
+    clearProps: 'all'
   });
 }
 
@@ -120,7 +120,7 @@ export function flipInY(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
+    clearProps: 'all'
   });
 }
 
@@ -148,6 +148,6 @@ export function spinIn(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter'
+    clearProps: 'all'
   });
 }

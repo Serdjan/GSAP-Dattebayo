@@ -17,6 +17,7 @@ import {
 import {
   ready,
   debounce,
+  isBelowViewport,
   getOptimalScrollTriggerStart,
 } from "./utils/helpers";
 import { mergeConfig, type DattebayoDefaults } from "./utils/defaults";
@@ -28,175 +29,13 @@ import * as textAnimations from "./text";
 // Scroll animations
 import * as scrollAnimations from "./scroll";
 
-/**
- * FOUC Prevention - Add this CSS to your stylesheet:
- *
- * [data-gsap] {
- *   visibility: hidden;
- * }
- *
- * This hides elements until GSAP initializes them.
- * The library will set visibility: visible when setting initial state.
- */
-
-/**
- * Animations that use gsap.to() instead of gsap.from()
- * These should NOT have clearProps applied before animation
- * because they animate FROM the current state (set by initialState)
- */
-const TO_ANIMATIONS = new Set([
-  'fadeIn',
-  'fadeOut',
-  'slideOutUp',
-  'slideOutDown',
-  'slideOutLeft',
-  'slideOutRight',
-  'rotateOut',
-  'focusToBlur'
-]);
-
-/**
- * Check if animation uses gsap.to() instead of gsap.from()
- */
-function isToAnimation(animationName: string): boolean {
-  return TO_ANIMATIONS.has(animationName);
-}
-
 let isAutoInitialized = false;
 let globalConfig: Partial<DattebayoDefaults> = {};
 
 /**
- * Options for auto-initialization
- */
-export interface AutoInitOptions {
-  alpine?: boolean;
-  debug?: boolean;
-}
-
-/**
- * Check if Alpine.js has already processed the DOM
- */
-function isAlpineReady(): boolean {
-  const alpine = (window as any).Alpine;
-  if (!alpine) return false;
-
-  // Check if any x-data element has been processed by Alpine
-  // Alpine adds _x_dataStack to processed elements
-  const xDataElement = document.querySelector('[x-data]');
-  if (xDataElement && (xDataElement as any)._x_dataStack) {
-    return true;
-  }
-
-  // Alternative: check Alpine's internal state (Alpine 3.x)
-  if (alpine.version && alpine.closestDataStack) {
-    // Alpine 3.x is loaded and ready
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * Wait for Alpine.js to be fully initialized before running callback
- */
-function waitForAlpine(callback: () => void, debug = false): void {
-  const alpine = (window as any).Alpine;
-
-  if (debug) {
-    console.log('[GSAP Dattebayo] Waiting for Alpine.js...');
-  }
-
-  // Check if Alpine has already processed the DOM
-  if (isAlpineReady()) {
-    if (debug) {
-      console.log('[GSAP Dattebayo] Alpine already initialized and DOM processed');
-    }
-    requestAnimationFrame(callback);
-    return;
-  }
-
-  if (alpine) {
-    // Alpine exists but hasn't processed DOM yet - wait for initialized event
-    if (debug) {
-      console.log('[GSAP Dattebayo] Alpine exists, waiting for alpine:initialized event');
-    }
-
-    // Set a short timeout as fallback in case event already fired
-    const fallbackTimeout = setTimeout(() => {
-      if (debug) {
-        console.log('[GSAP Dattebayo] Fallback: initializing after 100ms');
-      }
-      requestAnimationFrame(callback);
-    }, 100);
-
-    document.addEventListener('alpine:initialized', () => {
-      clearTimeout(fallbackTimeout);
-      if (debug) {
-        console.log('[GSAP Dattebayo] alpine:initialized event received');
-      }
-      requestAnimationFrame(callback);
-    }, { once: true });
-  } else {
-    // Alpine not yet loaded, wait for it
-    if (debug) {
-      console.log('[GSAP Dattebayo] Alpine not found, waiting for alpine:init event');
-    }
-    document.addEventListener('alpine:init', () => {
-      document.addEventListener('alpine:initialized', () => {
-        if (debug) {
-          console.log('[GSAP Dattebayo] alpine:initialized event received (after init)');
-        }
-        requestAnimationFrame(callback);
-      }, { once: true });
-    }, { once: true });
-
-    // Fallback after 2s if Alpine never arrives
-    setTimeout(() => {
-      if (debug) {
-        console.warn('[GSAP Dattebayo] Alpine not detected after 2s, initializing anyway');
-      }
-      callback();
-    }, 2000);
-  }
-}
-
-/**
- * Internal function to initialize animations
- */
-function initializeAnimations(debug = false): void {
-  if (debug) {
-    console.log('[GSAP Dattebayo] Initializing animations...');
-    console.log('[GSAP Dattebayo] Elements with data-gsap:', document.querySelectorAll('[data-gsap]').length);
-  }
-
-  animateElements();
-  setupObserver();
-  setupResizeHandler();
-
-  // Force ScrollTrigger to check current scroll position
-  requestAnimationFrame(() => {
-    ScrollTrigger.refresh(true);
-    if (debug) {
-      console.log('[GSAP Dattebayo] ScrollTrigger refreshed');
-    }
-  });
-}
-
-/**
  * Initialize auto-detection and animation
- * @param config - Default configuration for all animations
- * @param options - Auto-init options (alpine mode, debug)
  */
-export function autoInit(
-  config: Partial<DattebayoDefaults> = {},
-  options: AutoInitOptions = {}
-): void {
-  const { alpine = false, debug = false } = options;
-
-  if (debug) {
-    console.log('[GSAP Dattebayo] autoInit called', { isAutoInitialized, alpine, debug });
-  }
-
+export function autoInit(config: Partial<DattebayoDefaults> = {}): void {
   if (isAutoInitialized) return;
 
   // Initialize GSAP
@@ -205,35 +44,29 @@ export function autoInit(
   // Store global config
   globalConfig = config;
 
-  if (alpine && typeof window !== 'undefined') {
-    // Alpine mode: wait for Alpine to be ready
-    waitForAlpine(() => {
-      initializeAnimations(debug);
-    }, debug);
-  } else {
-    // Standard mode: initialize on DOM ready
-    ready(() => {
-      initializeAnimations(debug);
+  // Wait for DOM ready
+  ready(() => {
+    animateElements();
+    setupObserver();
+    setupResizeHandler();
+
+    // Force ScrollTrigger to check current scroll position
+    // This ensures animations trigger even if page is reloaded while scrolled
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh(true);
     });
-  }
+  });
 
   isAutoInitialized = true;
 }
 
 /**
  * Animate all elements with data attributes
- * @param root - The root element to search for animated elements (defaults to document)
  */
-export function animateElements(root: Document | HTMLElement = document): void {
+function animateElements(root: Document | HTMLElement = document): void {
   const elements = getAnimatedElements(root);
 
   elements.forEach((element) => {
-    // Skip elements not connected to the DOM (detached nodes from MutationObserver)
-    if (!element.isConnected) return;
-
-    // Skip elements already initialized by dattebayo
-    if ((element as any)._gsapDattebayo) return;
-
     const attrs = parseAttributes(element);
     const animation = attrs.animation;
 
@@ -260,9 +93,6 @@ export function animateElements(root: Document | HTMLElement = document): void {
       ...globalConfig,
       ...attrs,
     });
-
-    // Mark element as initialized to prevent duplicate processing
-    (element as any)._gsapDattebayo = true;
 
     // Execute animation
     executeAnimation(element, animation || "", config);
@@ -345,8 +175,7 @@ function executeImmediately(
   if (!animationFn) return;
 
   try {
-    // Execute with autoAlpha disabled - we handle visibility ourselves
-    animationFn(element, { ...config, autoAlpha: false });
+    animationFn(element, config);
   } catch (error) {
     console.error(`[GSAP Dattebayo] Error executing ${animationName}:`, error);
   }
@@ -462,12 +291,9 @@ function executeOnScroll(
     }
   } else {
     // AOS behavior: play once
-    // Track if element has been animated to avoid duplicate triggers
-    let hasAnimated = false;
-
-    // Don't set initial state here - let CSS handle hiding via [data-gsap] { visibility: hidden }
-    // We'll set visibility: visible when the animation starts
-
+    // Set initial state for AOS mode
+    gsap.set(element, initialState);
+    // AOS behavior: play once
     ScrollTrigger.create({
       trigger: element,
       start: optimalStart,
@@ -475,54 +301,20 @@ function executeOnScroll(
       markers: config.markers || false,
       once: config.once !== false, // Default to true for AOS behavior
 
-      // Check if element is already visible on page load
+      // Check if element is already scrolled past on page load
       onRefresh: (self) => {
-        // Skip if already animated
-        if (hasAnimated) return;
-
-        if (self.progress > 0) {
-          // Element already in view - animate it
-          hasAnimated = true;
-
-          try {
-            // Get initial and final states for FOUC-safe animation
-            const initial = getInitialState(animationName, config);
-            const final = getFinalState(animationName, config);
-            const duration = config.duration || 1;
-            const ease = config.ease || 'power2.out';
-            const delay = config.delay || 0;
-
-            // 1. Set initial state with visibility (element hidden but ready)
-            gsap.set(element, { ...initial, visibility: 'visible' });
-            // 2. Add class so CSS rule no longer applies
-            element.classList.add('gsap-ready');
-            // 3. Animate to final state
-            gsap.to(element, { ...final, duration, ease, delay, force3D: true });
-          } catch (error) {
-            console.error(`[GSAP Dattebayo] Error in onRefresh:`, error);
-          }
+        if (self.progress === 1) {
+          // Element already visible - set to final state immediately without animation
+          gsap.set(element, { clearProps: "all" });
         }
       },
 
       onEnter: () => {
-        // Skip if already animated
-        if (hasAnimated) return;
-        hasAnimated = true;
-
         try {
-          // Get initial and final states for FOUC-safe animation
-          const initial = getInitialState(animationName, config);
-          const final = getFinalState(animationName, config);
-          const duration = config.duration || 1;
-          const ease = config.ease || 'power2.out';
-          const delay = config.delay || 0;
-
-          // 1. Set initial state with visibility (element hidden but ready)
-          gsap.set(element, { ...initial, visibility: 'visible' });
-          // 2. Add class so CSS rule no longer applies
-          element.classList.add('gsap-ready');
-          // 3. Animate to final state
-          gsap.to(element, { ...final, duration, ease, delay, force3D: true });
+          // Clear the initial state properties so gsap.from() can animate properly
+          gsap.set(element, { clearProps: "all" });
+          // Now execute the animation
+          animationFn(element, config);
         } catch (error) {
           console.error(
             `[GSAP Dattebayo] Error executing ${animationName}:`,
@@ -656,10 +448,9 @@ function executeOnClick(
   element.addEventListener("click", () => {
     try {
       // Always reset element to normal state before animating
-      gsap.set(element, { clearProps: "opacity,x,y,scale,rotation,rotationX,rotationY,filter" });
+      gsap.set(element, { clearProps: "all" });
       // Execute animation every time (ignore 'once' for click mode)
-      // With autoAlpha disabled - we handle visibility ourselves
-      animationFn(element, { ...config, autoAlpha: false });
+      animationFn(element, config);
     } catch (error) {
       console.error(
         `[GSAP Dattebayo] Error executing ${animationName}:`,
@@ -874,125 +665,41 @@ function getInitialState(
     matrixReveal: { opacity: 0 },
   };
 
-  const state = stateMap[animationName] || { opacity: 0 };
-  // Add visibility: visible to override CSS [data-gsap] { visibility: hidden }
-  return { ...state, visibility: 'visible' };
+  return stateMap[animationName] || { opacity: 0 };
 }
 
 /**
  * Get final state for animation (normal/visible state)
- * Only returns properties that correspond to getInitialState() to avoid
- * forcing GSAP CSSPlugin to process unnecessary CSS properties (e.g. filter)
  */
 function getFinalState(
   animationName: string,
   config: DattebayoDefaults
 ): gsap.TweenVars {
-  const finalMap: Record<string, gsap.TweenVars> = {
-    // Fade animations
-    fade: { opacity: 1 },
-    fadeIn: { opacity: 1 },
-    fadeUp: { opacity: 1, y: 0 },
-    fadeDown: { opacity: 1, y: 0 },
-    fadeLeft: { opacity: 1, x: 0 },
-    fadeRight: { opacity: 1, x: 0 },
-
-    // Slide animations
-    slideInUp: { opacity: 1, y: 0 },
-    slideInDown: { opacity: 1, y: 0 },
-    slideInLeft: { opacity: 1, x: 0 },
-    slideInRight: { opacity: 1, x: 0 },
-
-    // Zoom animations
-    zoom: { opacity: 1, scale: 1 },
-    zoomIn: { opacity: 1, scale: 1 },
-    zoomOut: { opacity: 1, scale: 1 },
-    zoomInUp: { opacity: 1, scale: 1, y: 0 },
-    zoomInDown: { opacity: 1, scale: 1, y: 0 },
-    elasticZoom: { opacity: 1, scale: 1 },
-
-    // Rotate animations
-    rotate: { opacity: 1, rotation: 0 },
-    rotateIn: { opacity: 1, rotation: 0 },
-    rotateOut: { opacity: 0, rotation: 180 },
-    flipInX: { opacity: 1, rotationX: 0 },
-    flipInY: { opacity: 1, rotationY: 0 },
-    spinIn: { opacity: 1, rotation: 0 },
-
-    // Blur animations — only these use filter
-    blur: { opacity: 1, filter: "none" },
-    blurIn: { opacity: 1, filter: "none" },
-    blurToFocus: { opacity: 1, filter: "none" },
-    blurInUp: { opacity: 1, filter: "none", y: 0 },
-    blurZoom: { opacity: 1, filter: "none", scale: 1 },
-
-    // Text animations
-    charReveal: { opacity: 1 },
-    charFadeUp: { opacity: 1 },
-    charWave: { opacity: 1 },
-    charElastic: { opacity: 1 },
-    charBlur: { opacity: 1 },
-    wordReveal: { opacity: 1 },
-    wordScaleIn: { opacity: 1 },
-    wordRotateIn: { opacity: 1 },
-    wordSlideAlternate: { opacity: 1 },
-    lineReveal: { opacity: 1 },
-    lineClipReveal: { opacity: 1 },
-    lineSlideAlternate: { opacity: 1 },
-    lineScaleReveal: { opacity: 1 },
-    scramble: { opacity: 1 },
-    scrambleReveal: { opacity: 1 },
-    glitch: { opacity: 1 },
-    glitchReveal: { opacity: 1 },
-    matrix: { opacity: 1 },
-    matrixReveal: { opacity: 1 },
+  // Final state is always normal/visible - just properties, no timing
+  return {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    rotation: 0,
+    rotationX: 0,
+    rotationY: 0,
+    filter: "none",
   };
-
-  return finalMap[animationName] || { opacity: 1 };
 }
 
 /**
  * Setup MutationObserver for dynamic content
- * Debounced to avoid processing incomplete DOM trees (WordPress/Elementor compatibility)
  */
 function setupObserver(): void {
-  let pendingNodes: Set<HTMLElement> = new Set();
-  let rafId: number | null = null;
-
-  const processPendingNodes = () => {
-    rafId = null;
-    const nodes = pendingNodes;
-    pendingNodes = new Set();
-
-    nodes.forEach((node) => {
-      // Double-check node is still connected before processing
-      if (node.isConnected) {
-        animateElements(node);
-      }
-    });
-  };
-
   const observer = new MutationObserver((mutations) => {
-    let hasNewElements = false;
-
-    for (const mutation of mutations) {
-      for (let i = 0; i < mutation.addedNodes.length; i++) {
-        const node = mutation.addedNodes[i];
-        if (node.nodeType !== Node.ELEMENT_NODE) continue;
-        const el = node as HTMLElement;
-
-        // Only queue elements that have data-gsap attributes or contain them
-        if (el.hasAttribute('data-gsap') || el.querySelector('[data-gsap]')) {
-          pendingNodes.add(el);
-          hasNewElements = true;
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          animateElements(node as HTMLElement);
         }
-      }
-    }
-
-    // Batch processing via requestAnimationFrame (one frame delay)
-    if (hasNewElements && rafId === null) {
-      rafId = requestAnimationFrame(processPendingNodes);
-    }
+      });
+    });
   });
 
   observer.observe(document.body, {

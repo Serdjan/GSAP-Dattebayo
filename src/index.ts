@@ -13,7 +13,7 @@
 import { initGSAP, refreshScrollTriggers, killAll } from './utils/gsap-config';
 
 // Import auto-init for use in init function
-import { autoInit, refresh, destroy, animateElements } from './auto-init';
+import { autoInit, refresh, destroy } from './auto-init';
 
 // Export utilities
 export { mergeConfig, DEFAULT_CONFIG, EASINGS } from './utils/defaults';
@@ -29,7 +29,7 @@ export * from './text';
 export * from './scroll';
 
 // Re-export auto-init system
-export { autoInit, refresh, destroy, animateElements };
+export { autoInit, refresh, destroy };
 
 /**
  * Main initialization function
@@ -38,22 +38,20 @@ export interface DattebayoConfig {
   autoDetect?: boolean;
   defaults?: Partial<import('./utils/defaults').DattebayoDefaults>;
   debug?: boolean;
-  /** Wait for Alpine.js to initialize before scanning elements */
-  alpine?: boolean;
 }
 
 /**
  * Initialize GSAP Dattebayo
  */
 export function init(config: DattebayoConfig = {}): void {
-  const { autoDetect = true, defaults = {}, debug = false, alpine = false } = config;
+  const { autoDetect = true, defaults = {}, debug = false } = config;
 
   // Initialize GSAP plugins
   initGSAP();
 
   // Auto-detect and animate elements
   if (autoDetect) {
-    autoInit(defaults, { alpine, debug });
+    autoInit(defaults);
   }
 
   // Debug mode
@@ -78,7 +76,6 @@ export default {
   init,
   utils,
   autoInit,
-  animateElements,
   refresh: refreshScrollTriggers,
   destroy: killAll
 };

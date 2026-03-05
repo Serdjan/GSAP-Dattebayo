@@ -61,9 +61,8 @@ export function fadeUp(
     ease = 'power2.out',
     delay = 0,
     distance = 50,
-    autoAlpha = true,
-    immediateRender
-  } = options as FadeOptions & { immediateRender?: boolean };
+    autoAlpha = true
+  } = options;
 
   return gsap.from(toArray(target), {
     opacity: 0,
@@ -73,8 +72,7 @@ export function fadeUp(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter',
-    ...(immediateRender !== undefined && { immediateRender })
+    clearProps: 'all'
   });
 }
 
@@ -90,9 +88,8 @@ export function fadeDown(
     ease = 'power2.out',
     delay = 0,
     distance = 50,
-    autoAlpha = true,
-    immediateRender
-  } = options as FadeOptions & { immediateRender?: boolean };
+    autoAlpha = true
+  } = options;
 
   return gsap.from(toArray(target), {
     opacity: 0,
@@ -102,8 +99,7 @@ export function fadeDown(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter',
-    ...(immediateRender !== undefined && { immediateRender })
+    clearProps: 'all'
   });
 }
 
@@ -119,9 +115,8 @@ export function fadeLeft(
     ease = 'power2.out',
     delay = 0,
     distance = 50,
-    autoAlpha = true,
-    immediateRender
-  } = options as FadeOptions & { immediateRender?: boolean };
+    autoAlpha = true
+  } = options;
 
   return gsap.from(toArray(target), {
     opacity: 0,
@@ -131,8 +126,7 @@ export function fadeLeft(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter',
-    ...(immediateRender !== undefined && { immediateRender })
+    clearProps: 'all'
   });
 }
 
@@ -148,9 +142,8 @@ export function fadeRight(
     ease = 'power2.out',
     delay = 0,
     distance = 50,
-    autoAlpha = true,
-    immediateRender
-  } = options as FadeOptions & { immediateRender?: boolean };
+    autoAlpha = true
+  } = options;
 
   return gsap.from(toArray(target), {
     opacity: 0,
@@ -160,7 +153,6 @@ export function fadeRight(
     ease,
     delay,
     force3D: true,
-    clearProps: 'opacity,x,y,scale,rotation,rotationX,rotationY,filter',
-    ...(immediateRender !== undefined && { immediateRender })
+    clearProps: 'all'
   });
 }
