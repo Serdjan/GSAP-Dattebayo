@@ -57,7 +57,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/serdjan/gsap-dattebayo.git"
+    "url": "git+https://github.com/serdjan/gsap-dattebayo.git"
   },
   "bugs": {
     "url": "https://github.com/serdjan/gsap-dattebayo/issues"
