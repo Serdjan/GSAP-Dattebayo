@@ -13,7 +13,7 @@ const banner = `/*!
  * Released under the MIT License
  */`;
 
-const external = ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText'];
+const external = ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText', 'gsap/ScrambleTextPlugin'];
 
 const createConfig = (input, outputName) => ({
   input,
@@ -28,7 +28,8 @@ const createConfig = (input, outputName) => ({
       globals: {
         gsap: 'gsap',
         'gsap/ScrollTrigger': 'ScrollTrigger',
-        'gsap/SplitText': 'SplitText'
+        'gsap/SplitText': 'SplitText',
+        'gsap/ScrambleTextPlugin': 'ScrambleTextPlugin'
       }
     },
     // UMD minified
@@ -40,7 +41,8 @@ const createConfig = (input, outputName) => ({
       globals: {
         gsap: 'gsap',
         'gsap/ScrollTrigger': 'ScrollTrigger',
-        'gsap/SplitText': 'SplitText'
+        'gsap/SplitText': 'SplitText',
+        'gsap/ScrambleTextPlugin': 'ScrambleTextPlugin'
       },
       plugins: [terser()]
     },

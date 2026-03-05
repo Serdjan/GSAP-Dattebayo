@@ -881,22 +881,74 @@ function getInitialState(
 
 /**
  * Get final state for animation (normal/visible state)
+ * Only returns properties that correspond to getInitialState() to avoid
+ * forcing GSAP CSSPlugin to process unnecessary CSS properties (e.g. filter)
  */
 function getFinalState(
   animationName: string,
   config: DattebayoDefaults
 ): gsap.TweenVars {
-  // Final state is always normal/visible - just properties, no timing
-  return {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    scale: 1,
-    rotation: 0,
-    rotationX: 0,
-    rotationY: 0,
-    filter: "none",
+  const finalMap: Record<string, gsap.TweenVars> = {
+    // Fade animations
+    fade: { opacity: 1 },
+    fadeIn: { opacity: 1 },
+    fadeUp: { opacity: 1, y: 0 },
+    fadeDown: { opacity: 1, y: 0 },
+    fadeLeft: { opacity: 1, x: 0 },
+    fadeRight: { opacity: 1, x: 0 },
+
+    // Slide animations
+    slideInUp: { opacity: 1, y: 0 },
+    slideInDown: { opacity: 1, y: 0 },
+    slideInLeft: { opacity: 1, x: 0 },
+    slideInRight: { opacity: 1, x: 0 },
+
+    // Zoom animations
+    zoom: { opacity: 1, scale: 1 },
+    zoomIn: { opacity: 1, scale: 1 },
+    zoomOut: { opacity: 1, scale: 1 },
+    zoomInUp: { opacity: 1, scale: 1, y: 0 },
+    zoomInDown: { opacity: 1, scale: 1, y: 0 },
+    elasticZoom: { opacity: 1, scale: 1 },
+
+    // Rotate animations
+    rotate: { opacity: 1, rotation: 0 },
+    rotateIn: { opacity: 1, rotation: 0 },
+    rotateOut: { opacity: 0, rotation: 180 },
+    flipInX: { opacity: 1, rotationX: 0 },
+    flipInY: { opacity: 1, rotationY: 0 },
+    spinIn: { opacity: 1, rotation: 0 },
+
+    // Blur animations — only these use filter
+    blur: { opacity: 1, filter: "none" },
+    blurIn: { opacity: 1, filter: "none" },
+    blurToFocus: { opacity: 1, filter: "none" },
+    blurInUp: { opacity: 1, filter: "none", y: 0 },
+    blurZoom: { opacity: 1, filter: "none", scale: 1 },
+
+    // Text animations
+    charReveal: { opacity: 1 },
+    charFadeUp: { opacity: 1 },
+    charWave: { opacity: 1 },
+    charElastic: { opacity: 1 },
+    charBlur: { opacity: 1 },
+    wordReveal: { opacity: 1 },
+    wordScaleIn: { opacity: 1 },
+    wordRotateIn: { opacity: 1 },
+    wordSlideAlternate: { opacity: 1 },
+    lineReveal: { opacity: 1 },
+    lineClipReveal: { opacity: 1 },
+    lineSlideAlternate: { opacity: 1 },
+    lineScaleReveal: { opacity: 1 },
+    scramble: { opacity: 1 },
+    scrambleReveal: { opacity: 1 },
+    glitch: { opacity: 1 },
+    glitchReveal: { opacity: 1 },
+    matrix: { opacity: 1 },
+    matrixReveal: { opacity: 1 },
   };
+
+  return finalMap[animationName] || { opacity: 1 };
 }
 
 /**
